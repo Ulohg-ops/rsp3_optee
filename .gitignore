@@ -1,0 +1,72 @@
+# # === OP-TEE General ===
+# *.log
+# *.swp
+# *.swo
+# *.tmp
+# *.bak
+# *.orig
+
+# === Buildroot output ===
+out-br/
+*.img
+*.ext2
+*.tar
+*.tar.gz
+*.tar.xz
+*.cpio
+*.dtb
+*.its
+*.uImage
+*.zImage
+*.fit
+*.sdcard
+
+# === Compiled binaries ===
+# *.o
+# *.ko
+# *.so
+# *.a
+# *.elf
+# *.bin
+# *.map
+# *.lst
+# *.axf
+# *.sym
+
+# === Toolchains / Downloaded tool files ===
+toolchains/
+buildroot/dl/
+buildroot/output/
+.optee_toolchains
+
+# === Rust / Cargo (if using rust-based TAs or toolchains) ===
+# **/target/
+**/Cargo.lock
+**/.cargo/
+
+# === Python cache ===
+__pycache__/
+*.pyc
+
+# === Submodules (optional) ===
+# *.patch
+# *.rej
+
+# === IDE / OS-specific ===
+.DS_Store
+.vscode/
+*.user
+*.idea/
+*.sublime*
+*.iml
+
+# === Git backup files ===
+*~
+*.orig
+*.rej
+
+# === Remove temp metadata ===
+tags
+TAGS
+cscope.out
+.repo/
