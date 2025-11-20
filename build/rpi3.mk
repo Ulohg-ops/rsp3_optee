@@ -8,6 +8,11 @@ override COMPILE_NS_KERNEL := 64
 override COMPILE_S_USER    := 64
 override COMPILE_S_KERNEL  := 64
 
+
+ROOTFS_OVERLAY := $(CURDIR)/rootfs_overlay
+export BR2_ROOTFS_OVERLAY := $(ROOTFS_OVERLAY)
+
+
 # Need to set this before including common.mk
 BR2_TARGET_GENERIC_GETTY_PORT ?= ttyS0
 BR2_ROOTFS_POST_BUILD_SCRIPT ?= "board/raspberrypi3-64/post-build.sh"
