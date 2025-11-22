@@ -29,10 +29,10 @@ static TEE_Result pta_cmd_va2pa(uint32_t param_types,
 	if (param_types != exp_pt)
 		return TEE_ERROR_BAD_PARAMETERS;
 
-	/* VA 從 a 帶進來 */
+	/* VA 從 param[0].value.a 進來 */
 	va = (vaddr_t)params[0].value.a;
 
-	/* 拿到目前呼叫這個 PTA 的 user TA context */
+	/* caller 的 user TA context */
 	ts_sess = ts_get_calling_session();
 	if (!ts_sess)
 		return TEE_ERROR_BAD_STATE;
@@ -40,19 +40,24 @@ static TEE_Result pta_cmd_va2pa(uint32_t param_types,
 	utc = to_user_ta_ctx(ts_sess->ctx);
 	if (!utc)
 		return TEE_ERROR_BAD_STATE;
-	
-	DMSG("pta_va2pa: input VA = 0x%lx", (unsigned long)va);
 
-	/* 把 user TA 的 VA 轉成 PA */
+	IMSG("pta_va2pa: input VA = 0x%lx", (unsigned long)va);
+
+	/* 將 user TA 的 VA 轉 PA */
 	res = vm_va2pa(&utc->uctx, (void *)va, &pa);
-	if (res != TEE_SUCCESS)
+	if (res != TEE_SUCCESS) {
+		EMSG("vm_va2pa failed: 0x%x", res);
 		return res;
+	}
 
-	params[0].value.a = (uint32_t)pa;
-	params[0].value.b = 0;
+	IMSG("pta_va2pa: VA 0x%lx -> PA 0x%lx", (unsigned long)va, (unsigned long)pa);
 
-	DMSG("VA 0x%lx -> PA 0x%lx",
-	     (unsigned long)va, (unsigned long)pa);
+	/*
+	 * 回傳 PA —— 注意：
+	 *   - TA 端是從 value.b 取回 PA (低 32-bit)
+	 *   - 所以我們把 pa 放在 value.b
+	 */
+	params[0].value.b = (uint32_t)pa;
 
 	return TEE_SUCCESS;
 }
